@@ -57,44 +57,6 @@ A full-stack web application that analyzes ESG (Environmental, Social, Governanc
 
 6. Open http://localhost:3000 in your browser
 
-## API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/analyze | Analyze a news article |
-| GET | /api/articles | Get all analyzed articles |
-| GET | /api/articles/stats | Get analysis statistics |
-| GET | /api/articles/:id | Get specific article |
-| DELETE | /api/articles/:id | Delete an article |
-
-## Project Structure
-
-```
-├── backend/
-│   ├── models/
-│   │   └── Article.js
-│   ├── routes/
-│   │   ├── analyze.js
-│   │   └── articles.js
-│   ├── services/
-│   │   └── aiService.js
-│   └── server.js
-├── frontend/
-│   ├── public/
-│   └── src/
-│       ├── components/
-│       │   ├── AnalyzerForm.js
-│       │   ├── ArticlesList.js
-│       │   ├── Dashboard.js
-│       │   └── ResultsDisplay.js
-│       ├── services/
-│       │   └── api.js
-│       ├── App.js
-│       └── App.css
-├── .env
-├── .env.example
-└── package.json
-```
 
 ## Usage
 
@@ -104,11 +66,3 @@ A full-stack web application that analyzes ESG (Environmental, Social, Governanc
 4. Check the Dashboard for trends and statistics
 5. Browse History to see all analyzed articles
 
-## Environment Variables
-
-| Variable | Description |
-|----------|-------------|
-| MONGODB_URI | MongoDB connection string |
-| PORT | Backend server port (default: 5000) |
-| NODE_ENV | Environment mode |
-| CLIENT_URL | Frontend URL for CORS |
