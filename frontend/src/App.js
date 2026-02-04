@@ -43,6 +43,14 @@ function App() {
     setCurrentView('analyze');
   };
 
+  const handleTabChange = (view) => {
+    if (view === 'analyze') {
+      setAnalysisResult(null);
+      setError(null);
+    }
+    setCurrentView(view);
+  };
+
   return (
     <div className="App">
       <header className="app-header">
@@ -53,26 +61,26 @@ function App() {
         
         <nav className="nav-tabs">
           <button 
-            className={currentView === 'analyze' ? 'active' : ''}
-            onClick={() => setCurrentView('analyze')}
+            className={currentView === 'analyze' || currentView === 'results' ? 'active' : ''}
+            onClick={() => handleTabChange('analyze')}
           >
             Analyze
           </button>
           <button 
             className={currentView === 'fetch' ? 'active' : ''}
-            onClick={() => setCurrentView('fetch')}
+            onClick={() => handleTabChange('fetch')}
           >
             Fetch News
           </button>
           <button 
             className={currentView === 'dashboard' ? 'active' : ''}
-            onClick={() => setCurrentView('dashboard')}
+            onClick={() => handleTabChange('dashboard')}
           >
             Dashboard
           </button>
           <button 
             className={currentView === 'history' ? 'active' : ''}
-            onClick={() => setCurrentView('history')}
+            onClick={() => handleTabChange('history')}
           >
             History
           </button>
@@ -87,7 +95,7 @@ function App() {
           </div>
         )}
 
-        {currentView === 'analyze' && !analysisResult && (
+        {currentView === 'analyze' && (
           <AnalyzerForm 
             onAnalyze={handleAnalyze} 
             isLoading={isAnalyzing}

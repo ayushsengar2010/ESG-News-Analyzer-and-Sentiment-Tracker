@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './ArticlesList.css';
 import api from '../services/api';
 
@@ -11,11 +11,7 @@ function ArticlesList() {
     category: ''
   });
 
-  useEffect(() => {
-    fetchArticles();
-  }, [filter]);
-
-  const fetchArticles = async () => {
+  const fetchArticles = useCallback(async () => {
     try {
       setLoading(true);
       const params = {};
@@ -30,7 +26,11 @@ function ArticlesList() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    fetchArticles();
+  }, [fetchArticles]);
 
   const handleFilterChange = (type, value) => {
     setFilter(prev => ({
