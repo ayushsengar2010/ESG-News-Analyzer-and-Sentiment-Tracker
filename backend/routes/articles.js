@@ -117,6 +117,65 @@ router.get('/stats', async (req, res) => {
   }
 });
 
+router.get('/trends', async (req, res) => {
+  try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const trends = await Article.aggregate([
+      {
+        $match: {
+          analyzedAt: { $gte: thirtyDaysAgo }
+        }
+      },
+      {
+        $group: {
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$analyzedAt" } },
+            category: "$category"
+          },
+          count: { $sum: 1 },
+          avgSentiment: { $avg: "$sentimentScore" }
+        }
+      },
+      {
+        $sort: { "_id.date": 1 }
+      }
+    ]);
+
+    const formattedTrends = {};
+    trends.forEach(item => {
+      const date = item._id.date;
+      if (!formattedTrends[date]) {
+        formattedTrends[date] = {
+          date,
+          Environmental: { count: 0, sentiment: 0 },
+          Social: { count: 0, sentiment: 0 },
+          Governance: { count: 0, sentiment: 0 },
+          Multiple: { count: 0, sentiment: 0 },
+          Other: { count: 0, sentiment: 0 }
+        };
+      }
+      formattedTrends[date][item._id.category] = {
+        count: item.count,
+        sentiment: item.avgSentiment
+      };
+    });
+
+    res.json({
+      success: true,
+      trends: Object.values(formattedTrends)
+    });
+
+  } catch (error) {
+    console.error('Error fetching trends:', error);
+    res.status(500).json({
+      error: 'Failed to fetch trends',
+      message: error.message
+    });
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const article = await Article.findById(req.params.id);

@@ -4,6 +4,7 @@ import AnalyzerForm from './components/AnalyzerForm';
 import ResultsDisplay from './components/ResultsDisplay';
 import ArticlesList from './components/ArticlesList';
 import Dashboard from './components/Dashboard';
+import NewsFetcher from './components/NewsFetcher';
 import api from './services/api';
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState(null);
+  const [prefillArticle, setPrefillArticle] = useState(null);
 
   const handleAnalyze = async (articleData) => {
     setIsAnalyzing(true);
@@ -19,6 +21,7 @@ function App() {
     try {
       const result = await api.analyzeArticle(articleData);
       setAnalysisResult(result.article);
+      setPrefillArticle(null);
       setCurrentView('results');
     } catch (err) {
       setError(err.message || 'Failed to analyze article. Please try again.');
@@ -31,6 +34,12 @@ function App() {
   const handleNewAnalysis = () => {
     setAnalysisResult(null);
     setError(null);
+    setPrefillArticle(null);
+    setCurrentView('analyze');
+  };
+
+  const handleArticleSelect = (article) => {
+    setPrefillArticle(article);
     setCurrentView('analyze');
   };
 
@@ -48,6 +57,12 @@ function App() {
             onClick={() => setCurrentView('analyze')}
           >
             Analyze
+          </button>
+          <button 
+            className={currentView === 'fetch' ? 'active' : ''}
+            onClick={() => setCurrentView('fetch')}
+          >
+            Fetch News
           </button>
           <button 
             className={currentView === 'dashboard' ? 'active' : ''}
@@ -76,7 +91,12 @@ function App() {
           <AnalyzerForm 
             onAnalyze={handleAnalyze} 
             isLoading={isAnalyzing}
+            prefillData={prefillArticle}
           />
+        )}
+
+        {currentView === 'fetch' && (
+          <NewsFetcher onArticleSelect={handleArticleSelect} />
         )}
 
         {currentView === 'results' && analysisResult && (
@@ -94,6 +114,10 @@ function App() {
           <ArticlesList />
         )}
       </main>
+
+      <footer className="app-footer">
+        <p>ESG News Analyzer - Built for sustainable investing decisions</p>
+      </footer>
     </div>
   );
 }

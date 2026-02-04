@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AnalyzerForm.css';
 
-function AnalyzerForm({ onAnalyze, isLoading }) {
+function AnalyzerForm({ onAnalyze, isLoading, prefillData }) {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -9,6 +9,17 @@ function AnalyzerForm({ onAnalyze, isLoading }) {
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (prefillData) {
+      setFormData({
+        title: prefillData.title || '',
+        content: prefillData.content || '',
+        url: prefillData.url || ''
+      });
+      setErrors({});
+    }
+  }, [prefillData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,9 +73,9 @@ function AnalyzerForm({ onAnalyze, isLoading }) {
 
   const loadSampleArticle = () => {
     setFormData({
-      title: 'Major Tech Company Announces Carbon Neutral Initiative',
-      content: 'In a significant move towards environmental sustainability, TechCorp announced today its ambitious plan to achieve carbon neutrality by 2030. The company will invest $5 billion in renewable energy projects and sustainable infrastructure. CEO Jane Smith stated, "We recognize our responsibility to the planet and future generations. This initiative will reduce our carbon footprint by 75% within the next five years." The announcement was well-received by environmental groups, though some critics argue more immediate action is needed. The company also pledged to make its supply chain more sustainable and increase transparency in environmental reporting.',
-      url: 'https://example.com/tech-carbon-neutral'
+      title: 'Tesla Announces Major Sustainability Initiative for 2024',
+      content: 'Tesla Inc. announced today its ambitious plan to achieve carbon neutrality across all manufacturing facilities by the end of 2024. The electric vehicle maker will invest $3.5 billion in renewable energy infrastructure including solar panels and battery storage systems at its Gigafactories worldwide. CEO Elon Musk stated that the company is committed to leading the automotive industry in environmental responsibility. The initiative includes partnerships with local communities for workforce diversity programs and enhanced worker safety protocols. Industry analysts praised the move as a significant step forward for corporate sustainability, though some environmental groups called for faster action on supply chain emissions.',
+      url: 'https://example.com/tesla-sustainability-2024'
     });
     setErrors({});
   };
@@ -83,7 +94,7 @@ function AnalyzerForm({ onAnalyze, isLoading }) {
           className="sample-btn"
           disabled={isLoading}
         >
-          Load Sample Article
+          📝 Load Sample Article
         </button>
 
         <form onSubmit={handleSubmit}>
@@ -153,7 +164,7 @@ function AnalyzerForm({ onAnalyze, isLoading }) {
                   Analyzing...
                 </>
               ) : (
-                'Analyze Article'
+                '🔍 Analyze Article'
               )}
             </button>
           </div>

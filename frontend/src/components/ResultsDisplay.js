@@ -35,6 +35,17 @@ function ResultsDisplay({ result, onNewAnalysis }) {
     return colors[category] || '#a0aec0';
   };
 
+  const getCategoryIcon = (category) => {
+    const icons = {
+      'Environmental': '🌱',
+      'Social': '👥',
+      'Governance': '⚖️',
+      'Multiple': '📊',
+      'Other': '📄'
+    };
+    return icons[category] || '📄';
+  };
+
   const formatScore = (score) => {
     return (score * 100).toFixed(1);
   };
@@ -54,7 +65,7 @@ function ResultsDisplay({ result, onNewAnalysis }) {
     <div className="results-container">
       <div className="results-card">
         <div className="results-header">
-          <h2>Analysis Results</h2>
+          <h2>📊 Analysis Results</h2>
           <button onClick={onNewAnalysis} className="new-analysis-btn">
             + New Analysis
           </button>
@@ -107,7 +118,8 @@ function ResultsDisplay({ result, onNewAnalysis }) {
                 color: 'white'
               }}
             >
-              {result.category}
+              <span>{getCategoryIcon(result.category)}</span>
+              <span>{result.category}</span>
             </div>
 
             <div className="esg-scores">
@@ -158,14 +170,14 @@ function ResultsDisplay({ result, onNewAnalysis }) {
 
         {result.summary && (
           <div className="result-section summary-section">
-            <h4>Summary</h4>
+            <h4>📝 AI Summary</h4>
             <p>{result.summary}</p>
           </div>
         )}
 
         {result.keywords && result.keywords.length > 0 && (
           <div className="result-section keywords-section">
-            <h4>Key Topics</h4>
+            <h4>🏷️ Key Topics</h4>
             <div className="keywords-list">
               {result.keywords.map((keyword, index) => (
                 <span key={index} className="keyword-tag">

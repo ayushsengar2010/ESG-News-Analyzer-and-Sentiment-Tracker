@@ -40,7 +40,7 @@ function ArticlesList() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this article?')) {
+    if (!window.confirm('Delete this article?')) {
       return;
     }
 
@@ -48,7 +48,7 @@ function ArticlesList() {
       await api.deleteArticle(id);
       setArticles(prev => prev.filter(article => article._id !== id));
     } catch (err) {
-      alert('Failed to delete article: ' + err.message);
+      alert('Failed to delete: ' + err.message);
     }
   };
 
@@ -67,6 +67,17 @@ function ArticlesList() {
       case 'negative': return '#f56565';
       default: return '#ed8936';
     }
+  };
+
+  const getCategoryIcon = (category) => {
+    const icons = {
+      'Environmental': '🌱',
+      'Social': '👥',
+      'Governance': '⚖️',
+      'Multiple': '📊',
+      'Other': '📄'
+    };
+    return icons[category] || '📄';
   };
 
   if (loading) {
@@ -94,7 +105,7 @@ function ArticlesList() {
   return (
     <div className="articles-container">
       <div className="articles-header">
-        <h2>Analysis History</h2>
+        <h2>📋 Analysis History</h2>
         <p className="articles-count">{articles.length} articles analyzed</p>
       </div>
 
@@ -139,8 +150,8 @@ function ArticlesList() {
 
       {articles.length === 0 ? (
         <div className="empty-state">
-          <p>📋 No articles found</p>
-          <p className="empty-subtitle">
+          <h3>📋 No Articles Found</h3>
+          <p>
             {filter.sentiment || filter.category 
               ? 'Try adjusting your filters' 
               : 'Start by analyzing your first article'}
@@ -173,7 +184,7 @@ function ArticlesList() {
                   {article.sentiment}
                 </span>
                 <span className="category-badge-small">
-                  {article.category}
+                  {getCategoryIcon(article.category)} {article.category}
                 </span>
               </div>
 
@@ -198,12 +209,11 @@ function ArticlesList() {
 
               {article.keywords && article.keywords.length > 0 && (
                 <div className="article-keywords">
-                  {article.keywords.slice(0, 3).map((keyword, idx) => (
-                    <span key={idx} className="mini-keyword">{keyword}</span>
+                  {article.keywords.slice(0, 4).map((keyword, index) => (
+                    <span key={index} className="keyword-mini">
+                      {keyword}
+                    </span>
                   ))}
-                  {article.keywords.length > 3 && (
-                    <span className="mini-keyword">+{article.keywords.length - 3}</span>
-                  )}
                 </div>
               )}
             </div>

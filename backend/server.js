@@ -42,9 +42,11 @@ mongoose.connection.on('disconnected', () => {
 
 const analyzeRoutes = require('./routes/analyze');
 const articleRoutes = require('./routes/articles');
+const newsRoutes = require('./routes/news');
 
 app.use('/api/analyze', analyzeRoutes);
 app.use('/api/articles', articleRoutes);
+app.use('/api/news', newsRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'ESG News Analyzer API is running' });
